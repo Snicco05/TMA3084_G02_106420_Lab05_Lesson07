@@ -41,11 +41,10 @@ class _BottomNavLabState extends State<BottomNavLab>{
   Widget build(BuildContext context){
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Bottom Navigation Bar L05'),
+        title: const Text('Lab 05: Nico Navigation'),
         backgroundColor: Colors.purple,
         foregroundColor: Colors.white,
-      ),
-      body: screens[currentIndex],
+      ),      body: screens[currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         fixedColor: Colors.white,
