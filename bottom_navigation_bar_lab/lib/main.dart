@@ -1,18 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'screen1.dart';
 import 'screen2.dart';
 import 'screen3.dart';
 import 'screen4.dart';
 
-void main(){
-  runApp(const MyApp());
+class TabModel extends ChangeNotifier {
+  int currentIndex = 0;
+
+  void updateIndex(int index) {
+    currentIndex = index;
+    notifyListeners();
+  }
 }
 
-class MyApp extends StatelessWidget{
+void main() {
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => TabModel(),
+      child: const MyApp(),
+    ),
+  );
+}
+
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
       home: BottomNavLab(),
@@ -20,17 +35,10 @@ class MyApp extends StatelessWidget{
   }
 }
 
-class BottomNavLab extends StatefulWidget{
+class BottomNavLab extends StatelessWidget {
   const BottomNavLab({super.key});
 
-  @override
-  State<BottomNavLab> createState() => _BottomNavLabState();
-}
-
-class _BottomNavLabState extends State<BottomNavLab>{
-  int currentIndex =0;
-  
-  final List<Widget> screens = const[
+  final List<Widget> screens = const [
     Screen1(),
     Screen2(),
     Screen3(),
@@ -38,23 +46,24 @@ class _BottomNavLabState extends State<BottomNavLab>{
   ];
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
+    final currentIndex = context.watch<TabModel>().currentIndex;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Lab 05: Nico Navigation'),
         backgroundColor: Colors.purple,
         foregroundColor: Colors.white,
-      ),      body: screens[currentIndex],
+      ),
+      body: screens[currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         fixedColor: Colors.white,
         backgroundColor: Colors.purpleAccent,
         iconSize: 30,
         currentIndex: currentIndex,
-        onTap: (int index){
-          setState((){
-            currentIndex=index;
-          });
+        onTap: (int index) {
+          context.read<TabModel>().updateIndex(index);
         },
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
